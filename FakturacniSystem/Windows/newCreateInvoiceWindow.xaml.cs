@@ -11,5 +11,10 @@ namespace FakturacniSystem.Windows
         {
             InitializeComponent();
         }
+
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

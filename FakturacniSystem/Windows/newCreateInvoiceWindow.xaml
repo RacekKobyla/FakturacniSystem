@@ -35,6 +35,19 @@
                  TextWrapping="Wrap" 
                  VerticalAlignment="Top" 
                  Width="120"/>
+        <Button Content="Zavřít"
+                Click="CloseWindow"
+                HorizontalAlignment="Left"
+                Margin="706,384,0,0" 
+                VerticalAlignment="Top" 
+                Height="30" 
+                Width="70"/>
+        <Button Content="Vygenerovat"
+                HorizontalAlignment="Left"
+                Margin="602,384,0,0" 
+                VerticalAlignment="Top" 
+                Height="30" 
+                Width="80"/>
 
 
 
