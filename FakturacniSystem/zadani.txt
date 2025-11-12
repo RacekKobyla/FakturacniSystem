@@ -1,0 +1,4 @@
+GUI
+DATABAZE - SQLite (Seznam odberatelu, Seznam faktur)
+Evidace odbìratele
+Fakturaèní systém pro poradenství
