@@ -8,46 +8,106 @@
         ResizeMode="NoResize"
         Title="Vytvoření Faktury"
         Height="450"
-        Width="800">
+        Width="400">
     <Grid>
 
-        <Label Content="🧾 Formulář pro tvorbu faktury"
+        <Label Content="Formulář pro tvorbu faktury"
                HorizontalAlignment="Center"
-               Margin="0,10,0,0"
+               Margin="0,23,0,0"
                VerticalAlignment="Top"/>
 
+        <GroupBox Header="Informace o odběrateli" 
+                  Margin="75,79,75,151">
+            <Canvas>
+                <Label Content="Odběratel:" 
+               HorizontalAlignment="Left" 
+                       Canvas.Left="1" 
+                       Canvas.Top="10" 
+                       VerticalAlignment="Center"/>
+
+                <TextBox TextWrapping="Wrap" 
+                         Width="120" 
+                         HorizontalAlignment="Center" 
+                         Canvas.Left="80" 
+                         Canvas.Top="15" 
+                         VerticalAlignment="Center"/>
+
+
+                <Label Content="Adresa:"
+                       HorizontalAlignment="Center"
+                       Canvas.Left="1" 
+                       Canvas.Top="50"
+                       VerticalAlignment="Top"/>
+                <TextBox 
+                    TextWrapping="Wrap"  
+                    Width="120" 
+                    Canvas.Left="80" 
+                    Canvas.Top="55" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Top"/>
+
+
+                <Label Content="IČ:" 
+                       HorizontalAlignment="Left"
+                       Canvas.Left="1" 
+                       Canvas.Top="90" 
+                       VerticalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap" 
+                         Width="120" 
+                         Canvas.Left="80" 
+                         Canvas.Top="95" 
+                         HorizontalAlignment="Center" 
+                         VerticalAlignment="Top"/>
+
+
+                <Label Content="DIČ:" 
+                       HorizontalAlignment="Left" 
+                       Canvas.Left="1" 
+                       Canvas.Top="130" 
+                       VerticalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap" 
+                         Width="120" 
+                         HorizontalAlignment="Left" 
+                         Canvas.Left="80" 
+                         Canvas.Top="135" 
+                         VerticalAlignment="Top"/>
+
+
+
+            </Canvas>
+        </GroupBox>
+
+
         <ComboBox HorizontalAlignment="Left"
-                  Margin="656,54,0,0"
+                  Margin="205,318,0,0"
                   VerticalAlignment="Top"
                   Width="120">
             <ComboBoxItem Content="Zdeněk Horák"/>
         </ComboBox>
+
         <Label Content="Vystavil:" 
                HorizontalAlignment="Left" 
-               Margin="656,23,0,0" 
+               Margin="147,316,0,0" 
                VerticalAlignment="Top"/>
-        <Label Content="Odběratel:" 
-               HorizontalAlignment="Left" 
-               Margin="25,23,0,0" 
-               VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" 
-                 Margin="25,56,0,0" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Top" 
-                 Width="120"/>
+
         <Button Content="Zavřít"
                 Click="CloseWindow"
                 HorizontalAlignment="Left"
-                Margin="706,384,0,0" 
+                Margin="255,360,0,0" 
                 VerticalAlignment="Top" 
                 Height="30" 
-                Width="70"/>
+                Width="70" 
+                Background="#FFD40000" 
+                Foreground="White"/>
+
         <Button Content="Vygenerovat"
                 HorizontalAlignment="Left"
-                Margin="602,384,0,0" 
+                Margin="151,360,0,0" 
                 VerticalAlignment="Top" 
                 Height="30" 
-                Width="80"/>
+                Width="80" 
+                Foreground="White" 
+                Background="#FF05B300"/>
 
 
 
