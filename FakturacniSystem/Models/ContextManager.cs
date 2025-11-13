@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace FakturacniSystem.Models
 {
-    public class ContextManager
+    public static class ContextManager
     {
-        private readonly InvoiceSystemContext _iSContext;
+        private static InvoiceSystemContext _context;
 
-        public ContextManager(InvoiceSystemContext iSContext)
+        public static InvoiceSystemContext GetContext()
         {
-            _iSContext = iSContext;
+            return _context ??= new InvoiceSystemContext();
         }
     }
 }
+

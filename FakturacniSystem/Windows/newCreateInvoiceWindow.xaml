@@ -25,7 +25,8 @@
                        Canvas.Top="10" 
                        VerticalAlignment="Center"/>
 
-                <TextBox TextWrapping="Wrap" 
+                <TextBox x:Name="OdberatelJmeno"
+                         TextWrapping="Wrap" 
                          Width="120" 
                          HorizontalAlignment="Center" 
                          Canvas.Left="80" 
@@ -38,7 +39,7 @@
                        Canvas.Left="1" 
                        Canvas.Top="50"
                        VerticalAlignment="Top"/>
-                <TextBox 
+                <TextBox x:Name="OdberatelAdresa"
                     TextWrapping="Wrap"  
                     Width="120" 
                     Canvas.Left="80" 
@@ -52,7 +53,8 @@
                        Canvas.Left="1" 
                        Canvas.Top="90" 
                        VerticalAlignment="Center"/>
-                <TextBox TextWrapping="Wrap" 
+                <TextBox x:Name="OdberatelIC"
+                         TextWrapping="Wrap" 
                          Width="120" 
                          Canvas.Left="80" 
                          Canvas.Top="95" 
@@ -65,7 +67,8 @@
                        Canvas.Left="1" 
                        Canvas.Top="130" 
                        VerticalAlignment="Center"/>
-                <TextBox TextWrapping="Wrap" 
+                <TextBox x:Name="OdberatelDIC"
+                         TextWrapping="Wrap" 
                          Width="120" 
                          HorizontalAlignment="Left" 
                          Canvas.Left="80" 
@@ -78,7 +81,8 @@
         </GroupBox>
 
 
-        <ComboBox HorizontalAlignment="Left"
+        <ComboBox x:Name="VystavilComboBox"
+                  HorizontalAlignment="Left"
                   Margin="205,318,0,0"
                   VerticalAlignment="Top"
                   Width="120">

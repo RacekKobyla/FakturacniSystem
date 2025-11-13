@@ -1,4 +1,5 @@
-﻿using FakturacniSystem.Windows;
+﻿using FakturacniSystem.Models;
+using FakturacniSystem.Windows;
 using System.Windows;
 
 namespace FakturacniSystem
@@ -8,6 +9,7 @@ namespace FakturacniSystem
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -15,7 +17,7 @@ namespace FakturacniSystem
 
         private void CreateInvoice(object sender, RoutedEventArgs e)
         {
-            newCreateInvoiceWindow newCreateInvoiceWindow = new newCreateInvoiceWindow();
+            var newCreateInvoiceWindow = new newCreateInvoiceWindow();
             newCreateInvoiceWindow.Show();
         }
 
