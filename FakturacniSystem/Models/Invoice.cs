@@ -9,6 +9,8 @@ namespace FakturacniSystem.Models
     public class Invoice
     {
         public int Id { get; set; }
+        public string InvoiceNumber { get; set; }
+
         public string Odberatel { get; set; }
         public string Adresa { get; set; }
         public int IC { get; set; }
