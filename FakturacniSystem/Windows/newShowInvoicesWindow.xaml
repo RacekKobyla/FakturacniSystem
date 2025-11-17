@@ -1,7 +1,10 @@
 ﻿<Window x:Class="FakturacniSystem.Windows.newShowInvoicesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Seznam faktur" Height="450" Width="800">
+        Title="Seznam faktur"
+        Height="450"
+        Width="800"
+        Background="HotPink">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -11,12 +14,14 @@
 
         <ListBox x:Name="CustomersListBox"
              SelectionChanged="CustomersListBox_SelectionChanged"
-             Grid.Column="0"/>
+             Grid.Column="0"
+             Background="HotPink"/>
 
         <DataGrid x:Name="InvoicesDataGrid"
               AutoGenerateColumns="False"
               SelectionChanged="InvoicesDataGrid_SelectionChanged"
-              Grid.Column="1">
+              Grid.Column="1"
+              Background="HotPink">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Číslo" Binding="{Binding InvoiceNumber}"/>
                 <DataGridTextColumn Header="Datum" Binding="{Binding Vytvoreno}"/>
