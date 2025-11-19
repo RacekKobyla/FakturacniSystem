@@ -117,14 +117,19 @@ $@"FAKTURA
 Číslo faktury: {invoice.InvoiceNumber}
 Datum vytvoření: {invoice.Vytvoreno:dd.MM.yyyy HH:mm}
 
+------------------------------
+
 ODBĚRATEL
 Jméno: {invoice.Odberatel}
 Adresa: {invoice.Adresa}
 IČ: {invoice.IC}
 DIČ: {invoice.DIC}
 
+------------------------------
 
 SLUŽBA: {invoice.Sluzba}
+
+------------------------------
 
 ČÁSTKA K ÚHRADĚ: {invoice.Castka} Kč
 Vystavil: {invoice.Vystavil}
