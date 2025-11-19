@@ -41,6 +41,7 @@ namespace FakturacniSystem.Windows
                 string.IsNullOrWhiteSpace(OdberatelAdresa.Text) ||
                 string.IsNullOrWhiteSpace(OdberatelIC.Text) ||
                 string.IsNullOrWhiteSpace(OdberatelDIC.Text) ||
+                string.IsNullOrWhiteSpace(FakturaCastka.Text) ||
                 VystavilComboBox.SelectedItem == null)
             {
                 MessageBox.Show("Vyplňte prosím všechna pole.", "Chybí údaje", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -53,13 +54,26 @@ namespace FakturacniSystem.Windows
                 return;
             }
 
-            // Opravené získání hodnoty z ComboBoxu
+            if (!int.TryParse(FakturaCastka.Text, out int fakturaCastka)) 
+            {
+                MessageBox.Show("Částka musí být číslo!", "Chybný formát", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Opravené bezpečné získání hodnoty z ComboBoxu (ochrana proti null)
             string vystavil = "";
 
             if (VystavilComboBox.SelectedItem is ComboBoxItem item)
-                vystavil = item.Content.ToString();
+                vystavil = item.Content?.ToString() ?? "";
             else
-                vystavil = VystavilComboBox.Text;
+                vystavil = VystavilComboBox.Text ?? "";
+
+            string sluzba = "";
+
+            if (SluzbaComboBox.SelectedItem is ComboBoxItem sluzbaItem)
+                sluzba = sluzbaItem.Content?.ToString() ?? "";
+            else
+                sluzba = SluzbaComboBox.Text ?? "";
 
             var db = ContextManager.GetContext();
 
@@ -71,11 +85,14 @@ namespace FakturacniSystem.Windows
                 Adresa = OdberatelAdresa.Text,
                 IC = ic,
                 DIC = OdberatelDIC.Text,
+                Sluzba = sluzba,
+                Castka = fakturaCastka,
                 Vystavil = vystavil,
                 Vytvoreno = DateTime.Now
             };
 
             // Uložení do DB
+            db.Update(invoice);
             db.Invoices.Add(invoice);
             db.SaveChanges();
 
@@ -106,6 +123,10 @@ Adresa: {invoice.Adresa}
 IČ: {invoice.IC}
 DIČ: {invoice.DIC}
 
+
+SLUŽBA: {invoice.Sluzba}
+
+ČÁSTKA K ÚHRADĚ: {invoice.Castka} Kč
 Vystavil: {invoice.Vystavil}
 ";
 

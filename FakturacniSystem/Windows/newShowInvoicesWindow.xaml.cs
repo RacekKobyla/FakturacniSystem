@@ -62,6 +62,8 @@ namespace FakturacniSystem.Windows
             // Vyčisti detaily faktury
             DetailInvoiceNumber.Text = "";
             DetailDate.Text = "";
+            DetailSluzba.Text = "";  
+            DetailCastka.Text = "";
             DetailVystavil.Text = "";
         }
 
@@ -72,7 +74,9 @@ namespace FakturacniSystem.Windows
 
             // Detail faktury
             DetailInvoiceNumber.Text = $"Číslo faktury: {invoice.InvoiceNumber}";
-            DetailDate.Text = $"Datum: {invoice.Vytvoreno:dd.MM.yyyy HH:mm}";
+            DetailDate.Text = $"Datum vytvoření: {invoice.Vytvoreno:dd.MM.yyyy HH:mm}";
+            DetailSluzba.Text = $"Služba: {invoice.Sluzba}";
+            DetailCastka.Text = $"Částka: {invoice.Castka} Kč";
             DetailVystavil.Text = $"Vystavil: {invoice.Vystavil}";
 
             // Detail odběratele
