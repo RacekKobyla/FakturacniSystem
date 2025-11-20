@@ -1,9 +1,13 @@
-﻿using FakturacniSystem.Models;
+﻿using FakturacniSystem.Database;
+using FakturacniSystem.Models;
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.EntityFrameworkCore;
 
 namespace FakturacniSystem.Windows
 {
@@ -12,130 +16,149 @@ namespace FakturacniSystem.Windows
         public newCreateInvoiceWindow()
         {
             InitializeComponent();
-            var db = ContextManager.GetContext();
-            db.Database.EnsureCreated();
+            InitializeServiceCombo();
+            LoadCustomers();
+
+            // Nastavit datum vystavení na dnešek a zajistit, že "Vystavil" bude viditelný
+            IssueDatePicker.SelectedDate = DateTime.Now.Date;
+            VystavilComboBox.Visibility = Visibility.Visible;
         }
 
-        private void CloseWindow(object sender, RoutedEventArgs e)
+        private void InitializeServiceCombo()
         {
-            this.Close();
-        }
-
-        // Automatické číslo faktury
-        private string GenerateInvoiceNumber()
-        {
-            var db = ContextManager.GetContext();
-
-            int lastId = db.Invoices
-                           .OrderByDescending(i => i.Id)
-                           .Select(i => i.Id)
-                           .FirstOrDefault();
-
-            return (lastId + 1).ToString("00000"); // 00001, 00002...
-        }
-
-        private void SaveInfo(object sender, RoutedEventArgs e)
-        {
-            // Validace
-            if (string.IsNullOrWhiteSpace(OdberatelJmeno.Text) ||
-                string.IsNullOrWhiteSpace(OdberatelAdresa.Text) ||
-                string.IsNullOrWhiteSpace(OdberatelIC.Text) ||
-                string.IsNullOrWhiteSpace(OdberatelDIC.Text) ||
-                string.IsNullOrWhiteSpace(FakturaCastka.Text) ||
-                VystavilComboBox.SelectedItem == null)
+            var services = new[]
             {
-                MessageBox.Show("Vyplňte prosím všechna pole.", "Chybí údaje", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!int.TryParse(OdberatelIC.Text, out int ic))
-            {
-                MessageBox.Show("IČ musí být číslo!", "Chybný formát", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!int.TryParse(FakturaCastka.Text, out int fakturaCastka)) 
-            {
-                MessageBox.Show("Částka musí být číslo!", "Chybný formát", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            // Opravené bezpečné získání hodnoty z ComboBoxu (ochrana proti null)
-            string vystavil = "";
-
-            if (VystavilComboBox.SelectedItem is ComboBoxItem item)
-                vystavil = item.Content?.ToString() ?? "";
-            else
-                vystavil = VystavilComboBox.Text ?? "";
-
-            string sluzba = "";
-
-            if (SluzbaComboBox.SelectedItem is ComboBoxItem sluzbaItem)
-                sluzba = sluzbaItem.Content?.ToString() ?? "";
-            else
-                sluzba = SluzbaComboBox.Text ?? "";
-
-            var db = ContextManager.GetContext();
-
-            // Nová faktura
-            var invoice = new Invoice
-            {
-                InvoiceNumber = GenerateInvoiceNumber(),
-                Odberatel = OdberatelJmeno.Text,
-                Adresa = OdberatelAdresa.Text,
-                IC = ic,
-                DIC = OdberatelDIC.Text,
-                Sluzba = sluzba,
-                Castka = fakturaCastka,
-                Vystavil = vystavil,
-                Vytvoreno = DateTime.Now
+                "Elektroinstalace 1h",
+                "Elektroinstalace 2h",
+                "IT služby 1h",
+                "IT služby 2h"
             };
 
-            // Uložení do DB
-            db.Update(invoice);
-            db.Invoices.Add(invoice);
-            db.SaveChanges();
-
-            // Export do TXT
-            SaveInvoiceAsTxt(invoice);
-
-            MessageBox.Show("Faktura byla úspěšně vytvořena a uložena.");
-            this.Close();
+            SluzbaComboBox.ItemsSource = services;
+            SluzbaComboBox.SelectionChanged += SluzbaComboBox_SelectionChanged;
         }
 
-        private void SaveInvoiceAsTxt(Invoice invoice)
+        private void SluzbaComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Textový soubor (*.txt)|*.txt";
-            dialog.FileName = $"Faktura_{invoice.InvoiceNumber}.txt";
+            var text = (SluzbaComboBox.SelectedItem as string) ?? SluzbaComboBox.Text ?? string.Empty;
+            var key = text.Trim().ToLowerInvariant();
 
-            if (dialog.ShowDialog() == true)
+            int amount = key switch
             {
-                string content =
-$@"FAKTURA
-------------------------------
-Číslo faktury: {invoice.InvoiceNumber}
-Datum vytvoření: {invoice.Vytvoreno:dd.MM.yyyy HH:mm}
+                "elektroinstalace 1h" => 2000,
+                "elektroinstalace 2h" => 2000 * 2,
+                "it služby 1h" => 2500,
+                "it služby 2h" => 2500 * 2,
+                _ => 0
+            };
 
-------------------------------
+            CastkaBox.Text = amount > 0 ? amount.ToString() : string.Empty;
+        }
 
-ODBĚRATEL
-Jméno: {invoice.Odberatel}
-Adresa: {invoice.Adresa}
-IČ: {invoice.IC}
-DIČ: {invoice.DIC}
+        private void LoadCustomers()
+        {
+            var db = ContextManager.GetContext();
+            var list = db.Customers.OrderBy(c => c.Prijmeni).ThenBy(c => c.Jmeno).ToList();
+            CustomerComboBox.ItemsSource = list;
+            // DisplayMemberPath je nastaven v XAML na "FullName"
+        }
 
-------------------------------
+        private string GenerateInvoiceNumber(InvoiceSystemContext db)
+        {
+            var lastInvoice = db.Invoices.OrderByDescending(i => i.Id).FirstOrDefault();
+            int nextNumber = lastInvoice != null ? lastInvoice.Id + 1 : 1;
+            return $"F{nextNumber:D6}";
+        }
 
-SLUŽBA: {invoice.Sluzba}
+        private void OpenRegister_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new newRegistrateCustomer();
+            win.Owner = this;
+            win.ShowDialog();
+            LoadCustomers();
+        }
 
-------------------------------
+        private void CloseWindow(object sender, RoutedEventArgs e) => this.Close();
 
-ČÁSTKA K ÚHRADĚ: {invoice.Castka} Kč
-Vystavil: {invoice.Vystavil}
-";
+        // Jediný tlačítko: uloží do DB a nabídne uložení TXT
+        private void GenerateAndSave_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CustomerComboBox.SelectedItem is not Customer customer)
+                {
+                    MessageBox.Show("Vyberte odběratele.", "Neplatné údaje", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                File.WriteAllText(dialog.FileName, content, System.Text.Encoding.UTF8);
+                string sluzba = (SluzbaComboBox.SelectedItem as string) ?? SluzbaComboBox.Text ?? string.Empty;
+                sluzba = sluzba.Trim();
+                if (string.IsNullOrWhiteSpace(sluzba))
+                {
+                    MessageBox.Show("Zadejte službu.", "Neplatné údaje", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (!decimal.TryParse(CastkaBox.Text, out decimal castkaDecimal))
+                {
+                    MessageBox.Show("Částka musí být číslo.", "Neplatné údaje", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                int castka = (int)castkaDecimal;
+
+                DateTime vystaven = IssueDatePicker.SelectedDate ?? DateTime.Now;
+                DateTime splatnost = DueDatePicker.SelectedDate ?? vystaven.AddDays(14);
+                string vystavil = (VystavilComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? VystavilComboBox.Text ?? "";
+
+                var db = ContextManager.GetContext();
+
+                var invoice = new Invoice
+                {
+                    InvoiceNumber = GenerateInvoiceNumber(db),
+                    CustomerId = customer.Id,
+                    Sluzba = sluzba,
+                    Castka = castka,
+                    Vystavil = vystavil,
+                    Vytvoreno = vystaven,
+                    Splatnost = splatnost
+                };
+
+                db.Invoices.Add(invoice);
+                db.SaveChanges();
+
+                // připrav exportní text
+                var sb = new StringBuilder();
+                sb.AppendLine($"Číslo faktury: {invoice.InvoiceNumber}");
+                sb.AppendLine($"Vystaveno: {invoice.Vytvoreno:dd.MM.yyyy}");
+                sb.AppendLine($"Splatnost: {invoice.Splatnost:dd.MM.yyyy}");
+                sb.AppendLine();
+                sb.AppendLine("ODBĚRATEL:");
+                sb.AppendLine($"{customer.Jmeno} {customer.Prijmeni}");
+                sb.AppendLine($"{customer.Ulice} {customer.CP}");
+                sb.AppendLine($"{customer.PSC} {customer.Mesto}");
+                sb.AppendLine($"IČ: {customer.IC}");
+                sb.AppendLine($"DIČ: {customer.DIC}");
+                sb.AppendLine();
+                sb.AppendLine($"SLUŽBA: {invoice.Sluzba}");
+                sb.AppendLine($"ČÁSTKA: {invoice.Castka} Kč");
+                sb.AppendLine($"Vystavil: {invoice.Vystavil}");
+
+                var dlg = new SaveFileDialog { FileName = $"Faktura_{invoice.InvoiceNumber}.txt", DefaultExt = ".txt", Filter = "Text files (*.txt)|*.txt" };
+                if (dlg.ShowDialog() == true)
+                {
+                    File.WriteAllText(dlg.FileName, sb.ToString(), Encoding.UTF8);
+                    MessageBox.Show("Faktura uložena a exportována do souboru.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Faktura uložena v databázi (export zrušen).", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

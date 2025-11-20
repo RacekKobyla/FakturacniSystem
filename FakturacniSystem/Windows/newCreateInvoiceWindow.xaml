@@ -1,170 +1,177 @@
 ﻿<Window x:Class="FakturacniSystem.Windows.newCreateInvoiceWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FakturacniSystem.Windows"
-        mc:Ignorable="d"
+        Title="Vytvoření faktury" 
+        Height="420" 
+        Width="600" 
         ResizeMode="NoResize"
-        Title="Vytvoření Faktury"
-        Height="550"
-        Width="450"
-        Background="HotPink">
-    <Grid>
+        Background="HotPink"
+        Foreground="White">
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <Label Content="Formulář pro tvorbu faktury"
-               HorizontalAlignment="Center"
-               Margin="0,23,0,0"
-               VerticalAlignment="Top"
-               Foreground="White"/>
+        <TextBlock Text="Tvorba faktury"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,8"/>
 
-        <GroupBox Header="Informace o odběrateli" 
-                  Margin="39,74,39,254"
-                  Foreground="White">
-            <Canvas>
-                <Label Content="Odběratel:" 
-               HorizontalAlignment="Left" 
-                       Canvas.Left="1" 
-                       Canvas.Top="10" 
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
+        <Grid Grid.Row="1" 
+              Margin="0,4,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="OdberatelJmeno"
-                         TextWrapping="Wrap" 
-                         Width="200" 
-                         HorizontalAlignment="Left" 
-                         Canvas.Left="80" 
-                         Canvas.Top="15" 
-                         VerticalAlignment="Center"/>
+            <!-- Levá část: výběr odběratele -->
+            <GroupBox Header="Odběratel" 
+                      Grid.Column="0" 
+                      Padding="8" 
+                      Margin="0,0,354,0" 
+                      Grid.ColumnSpan="3">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" 
+                                Margin="0,0,0,6">
+                        <ComboBox x:Name="CustomerComboBox" 
+                                  Width="200" 
+                                  HorizontalAlignment="Left" 
+                                  DisplayMemberPath="FullName"/>
+                        
+                        <Button x:Name="OpenRegisterButton"
+                                Content="Nový"
+                                Width="40"
+                                Margin="6,0,0,0"
+                                Click="OpenRegister_Click"/>
+                    </StackPanel>
 
+                    <TextBlock Text="(Vyberte odběratele z registru)"
+                               FontStyle="Italic"
+                               FontSize="11"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+            </GroupBox>
 
-                <Label Content="Adresa:"
-                       HorizontalAlignment="Center"
-                       Canvas.Left="1" 
-                       Canvas.Top="50"
-                       VerticalAlignment="Top"
-                       Foreground="White"/>
+            <!-- Mezera -->
+            <GridSplitter Grid.Column="2"
+                          Width="6"
+                          HorizontalAlignment="Stretch"
+                          Margin="19,0,343,0"/>
 
-                <TextBox x:Name="OdberatelAdresa"
-                    TextWrapping="Wrap"  
-                    Width="200" 
-                    Canvas.Left="80" 
-                    Canvas.Top="55" 
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Center"/>
+            <!-- Pravá část: data faktury -->
+            <GroupBox Header="Data faktury" 
+                      Grid.Column="2" 
+                      Padding="8" 
+                      Margin="30,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Content="IČ:" 
-                       HorizontalAlignment="Left"
-                       Canvas.Left="1" 
-                       Canvas.Top="90" 
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
+                    <TextBlock Text="Služba:"
+                               Grid.Row="0" 
+                               Grid.Column="0" 
+                               VerticalAlignment="Center"
+                               Margin="0,4"/>
+                    
+                    <ComboBox x:Name="SluzbaComboBox"
+                              Grid.Row="0"
+                              Grid.Column="1"
+                              Margin="0,4" 
+                              IsEditable="True" />
 
-                <TextBox x:Name="OdberatelIC"
-                         TextWrapping="Wrap" 
-                         Width="200" 
-                         Canvas.Left="80" 
-                         Canvas.Top="95" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                               Grid.Column="1" 
+                               Margin="0,0,0,6" 
+                               FontStyle="Italic" 
+                               FontSize="12"
+                               Text="{Binding ElementName=SluzbaComboBox, Path=Text, StringFormat=Vybraná služba: {0}}"/>
 
+                    <TextBlock Text="Částka (Kč):"
+                               Grid.Row="2"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="0,4"/>
+                    
+                    <TextBox x:Name="CastkaBox"
+                             Grid.Row="2" 
+                             Grid.Column="1"
+                             Margin="0,4" 
+                             IsReadOnly="True"/>
 
-                <Label Content="DIČ:" 
-                       HorizontalAlignment="Left" 
-                       Canvas.Left="1" 
-                       Canvas.Top="130" 
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
+                    <TextBlock Text="Datum vystavení:"
+                               Grid.Row="3"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="0,4"/>
+                    
+                    <DatePicker x:Name="IssueDatePicker"
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Margin="0,4"/>
 
-                <TextBox x:Name="OdberatelDIC"
-                         TextWrapping="Wrap" 
-                         Width="200" 
-                         HorizontalAlignment="Left" 
-                         Canvas.Left="80" 
-                         Canvas.Top="135" 
-                         VerticalAlignment="Center" 
-                         RenderTransformOrigin="0.5,0.5">
+                    <TextBlock Text="Datum splatnosti:"
+                               Grid.Row="4"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="0,4"/>
+                    
+                    <DatePicker x:Name="DueDatePicker"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Margin="0,4"/>
 
-                    <TextBox.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="-0.365"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </TextBox.RenderTransform>
-                </TextBox>
+                    <TextBlock Text="Vystavil:"
+                               Grid.Row="5"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="0,4"/>
 
-            </Canvas>
-        </GroupBox>
+                    <ComboBox x:Name="VystavilComboBox"
+                              Grid.Row="5"
+                              Grid.Column="1"
+                              Margin="0,4">
+                        <ComboBoxItem Content="Zdeněk Horák"/>
+                    </ComboBox>
 
+                </Grid>
+            </GroupBox>
+        </Grid>
 
-        <ComboBox x:Name="VystavilComboBox"
-                  HorizontalAlignment="Left"
-                  Margin="298,401,0,0"
-                  VerticalAlignment="Top"
-                  Width="120">
-            <ComboBoxItem Content="Zdeněk Horák"/>
-        </ComboBox>
-
-        <Label Content="Vystavil:" 
-               HorizontalAlignment="Left" 
-               Margin="240,399,0,0" 
-               VerticalAlignment="Top"
-               Foreground="White"/>
-
-        <Button Content="Zavřít"
-                Click="CloseWindow"
-                HorizontalAlignment="Left"
-                Margin="341,436,0,0" 
-                VerticalAlignment="Top" 
-                Height="30" 
-                Width="70" 
-                Background="#FFD40000" 
-                Foreground="White"/>
-
-        <Button Content="Vygenerovat"
-                Click="SaveInfo"
-                HorizontalAlignment="Left"
-                Margin="237,436,0,0" 
-                VerticalAlignment="Top" 
-                Height="30" 
-                Width="80" 
-                Foreground="White" 
-                Background="#FF05B300"/>
-
-        <Label Content="Částka:" 
-                       HorizontalAlignment="Left" 
-                       VerticalAlignment="Top"
-                       Foreground="White"
-               RenderTransformOrigin="0.69,0.581"
-               Margin="45,347,0,0"/>
-
-        <TextBox x:Name="FakturaCastka"
-                 TextWrapping="Wrap" 
-                 Width="120" 
-                 HorizontalAlignment="Left" 
-                 VerticalAlignment="Top" 
-                 Margin="99,352,0,0"/>
-
-
-        <Label Content="Služba:" 
-               HorizontalAlignment="Left" 
-               VerticalAlignment="Top"
-               Foreground="White"
-               RenderTransformOrigin="0.69,0.581"
-               Margin="45,301,0,0"/>
-
-        <ComboBox x:Name="SluzbaComboBox"
-                  HorizontalAlignment="Left"
-                  Margin="101,303,0,0"
-                  VerticalAlignment="Top"
-                  Width="192">
-            <ComboBoxItem Content="Elektroinstalace"/>
-            <ComboBoxItem Content="Servis počítačů"/>
-            <ComboBoxItem Content="Tvorba webových stránek"/>
-        </ComboBox>
-
+        <!-- Footer: jeden zelený button pro uložení do DB a generování TXT -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right" 
+                    Margin="0,8,0,0">
+            
+            <Button Content="Zavřít"
+                    Width="80"
+                    Margin="0,0,8,0"
+                    Click="CloseWindow" 
+                    Background="#FFD40000"
+                    Foreground="White"/>
+            
+            <Button Content="Vygenerovat"
+                    Width="110" 
+                    Click="GenerateAndSave_Click" 
+                    Background="#FF05B300" 
+                    Foreground="White"/>
+            
+        </StackPanel>
     </Grid>
 </Window>

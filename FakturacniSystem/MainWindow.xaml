@@ -20,18 +20,28 @@
                 HorizontalAlignment="Center" 
                 Height="30" 
                 VerticalAlignment="Top" 
-                Width="300" Margin="0,82,0,0"
+                Width="300" Margin="0,85,0,0"
                 />
 
         <Button Content="Přehled Faktur a Odběratelů" 
-                x:Name="ShowButton"
+                x:Name="ShowInvoicesButton"
                 Click="ShowInvoices" 
                 Foreground="White"
                 Background="HotPink"
                 HorizontalAlignment="Center" 
-                Height="30" Margin="0,117,0,0" 
+                Height="30" 
                 VerticalAlignment="Top" 
-                Width="300" />
+                Width="300" Margin="0,120,0,0" />
+
+        <Button Content="Registrace Odběratele" 
+                x:Name="RegistrateCustomer"
+                Click="CustomerRegistration" 
+                Foreground="White"
+                Background="HotPink"
+                HorizontalAlignment="Center" 
+                Height="30" 
+                VerticalAlignment="Top" 
+                Width="300" Margin="0,50,0,0" />
 
         <Label Content="Fakturační Systém" 
                HorizontalAlignment="Center"

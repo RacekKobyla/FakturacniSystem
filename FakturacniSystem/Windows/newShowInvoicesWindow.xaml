@@ -1,59 +1,174 @@
 ﻿<Window x:Class="FakturacniSystem.Windows.newShowInvoicesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Seznam faktur"
-        Height="600"
-        Width="1000"
-        Background="HotPink">
-    <Grid>
+        Title="Seznam faktur" 
+        Height="520" 
+        Width="900"
+        Background="HotPink"
+        Foreground="White">
+    <Grid Margin="8">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="8"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="CustomersListBox"
-             SelectionChanged="CustomersListBox_SelectionChanged"
-             Grid.Column="0"
-             Background="HotPink"/>
+        <!-- Seznam zákazníků -->
+        <GroupBox Header="Odběratelé"
+                  Grid.Column="0"
+                  Padding="6">
+            
+            <DockPanel LastChildFill="True">
+                <Button Content="Zobrazit vše"
+                        DockPanel.Dock="Top"
+                        Margin="0,0,0,6" 
+                        Click="ShowAllInvoices_Click"/>
+                
+                <ListBox x:Name="CustomersListBox"
+                         SelectionChanged="CustomersListBox_SelectionChanged"
+                         DisplayMemberPath="Prijmeni"/>
+                
+            </DockPanel>
+        </GroupBox>
 
-        <DataGrid x:Name="InvoicesDataGrid"
-              AutoGenerateColumns="False"
-              SelectionChanged="InvoicesDataGrid_SelectionChanged"
-              Grid.Column="1"
-              Background="HotPink">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Číslo" Binding="{Binding InvoiceNumber}"/>
-                <DataGridTextColumn Header="Datum" Binding="{Binding Vytvoreno}"/>
-                <DataGridTextColumn Header="Vystavil" Binding="{Binding Vystavil}"/>
-                <DataGridTextColumn Header="Částka" Binding="{Binding Castka}"/>
-                <DataGridTextColumn Header="Služba" Binding="{Binding Sluzba}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <GridSplitter Grid.Column="1" 
+                      Width="6" 
+                      HorizontalAlignment="Stretch"/>
 
-        <StackPanel x:Name="InvoiceDetailPanel"
-                Margin="10"
-                Grid.Column="2">
+        <!-- Faktury a detail -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="220"/>
+            </Grid.RowDefinitions>
 
-            <TextBlock Text="Detail faktury" 
-                   FontWeight="Bold" 
-                   FontSize="18"/>
+            <GroupBox Header="Faktury" 
+                      Grid.Row="0" 
+                      Padding="6">
+                
+                <DataGrid x:Name="InvoicesDataGrid"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True" 
+                          SelectionMode="Single"
+                          SelectionChanged="InvoicesDataGrid_SelectionChanged">
 
-            <TextBlock x:Name="DetailInvoiceNumber"/>
-            <TextBlock x:Name="DetailDate"/>
-            <TextBlock x:Name="DetailSluzba"/>
-            <TextBlock x:Name="DetailCastka"/>
-            <TextBlock x:Name="DetailVystavil"/>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Číslo" 
+                                            Binding="{Binding InvoiceNumber}"
+                                            Width="110"/>
 
-            <TextBlock Text="Odběratel" 
-                   FontWeight="Bold" 
-                   Margin="0,10,0,0"/>
+                        <DataGridTextColumn Header="Odběratel"
+                                            Binding="{Binding Customer.Prijmeni}" 
+                                            Width="180"/>
 
-            <TextBlock x:Name="DetailOdberatel"/>
-            <TextBlock x:Name="DetailAdresa"/>
-            <TextBlock x:Name="DetailIC"/>
-            <TextBlock x:Name="DetailDIC"/>
-        </StackPanel>
+                        <DataGridTextColumn Header="Služba" 
+                                            Binding="{Binding Sluzba}"
+                                            Width="*"/>
 
+                        <DataGridTextColumn Header="Částka" 
+                                            Binding="{Binding Castka}"
+                                            Width="100"/>
+
+                        <DataGridTextColumn Header="Vystaveno"
+                                            Binding="{Binding Vytvoreno, StringFormat=dd.MM.yyyy}"
+                                            Width="120"/>
+
+                        <DataGridTextColumn Header="Splatnost"
+                                            Binding="{Binding Splatnost, StringFormat=dd.MM.yyyy}"
+                                            Width="120"/>
+
+                        <DataGridTextColumn Header="Vystavil"
+                                            Binding="{Binding Vystavil}"
+                                            Width="120"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <GroupBox Header="Detail"
+                      Grid.Row="1" 
+                      Padding="8"
+                      Margin="0,8,0,0">
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" 
+                                Margin="0,0,12,0">
+                        
+                        <TextBlock Text="Odběratel:"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,6"/>
+                        
+                        <TextBlock x:Name="DetailOdberatel" 
+                                   Text="-" 
+                                   Margin="0,0,0,8"/>
+                        
+                        <TextBlock Text="Adresa:"
+                                   FontWeight="Bold"
+                                   Margin="0,6,0,6"/>
+                        
+                        <TextBlock x:Name="DetailAdresa"
+                                   Text="-" 
+                                   Margin="0,0,0,8"/>
+                        
+                        <TextBlock Text="IČ / DIČ:" 
+                                   FontWeight="Bold" 
+                                   Margin="0,6,0,6"/>
+                        
+                        <TextBlock x:Name="DetailIC" 
+                                   Text="-" 
+                                   Margin="0,0,0,4"/>
+                        
+                        <TextBlock x:Name="DetailDIC"
+                                   Text="-" 
+                                   Margin="0,0,0,4"/>
+                        
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Faktura:"
+                                   FontWeight="Bold" 
+                                   Margin="0,0,0,6"/>
+                        
+                        <TextBlock x:Name="DetailInvoiceNumber" 
+                                   Text="-" 
+                                   Margin="0,0,0,8"/>
+                        
+                        <TextBlock Text="Datum vystavení:"
+                                   FontWeight="Bold" 
+                                   Margin="0,6,0,6"/>
+                        
+                        <TextBlock x:Name="DetailDate"
+                                   Text="-" 
+                                   Margin="0,0,0,8"/>
+                        
+                        <TextBlock Text="Služba / Částka:" 
+                                   FontWeight="Bold" 
+                                   Margin="0,6,0,6"/>
+                        
+                        <TextBlock x:Name="DetailSluzba" 
+                                   Text="-" 
+                                   Margin="0,0,0,4"/>
+                        
+                        <TextBlock x:Name="DetailCastka"
+                                   Text="-" 
+                                   Margin="0,0,0,4"/>
+                        
+                        <TextBlock Text="Vystavil:" 
+                                   FontWeight="Bold" 
+                                   Margin="0,6,0,6"/>
+                        
+                        <TextBlock x:Name="DetailVystavil"
+                                   Text="-"
+                                   Margin="0,0,0,4"/>
+                        
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

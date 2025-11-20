@@ -26,5 +26,11 @@ namespace FakturacniSystem
             newShowInvoicesWindow newShowInvoicesWindow = new newShowInvoicesWindow();
             newShowInvoicesWindow.Show();
         }
+
+        private void CustomerRegistration(object sender, RoutedEventArgs e)
+        {
+            newRegistrateCustomer newRegistrateCustomer = new newRegistrateCustomer();
+            newRegistrateCustomer.Show();
+        }
     }
 }

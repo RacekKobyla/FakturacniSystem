@@ -1,0 +1,118 @@
+﻿<Window x:Class="FakturacniSystem.Windows.newRegistrateCustomer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Registrace odběratele"
+        Height="400"
+        Width="420"
+        Background="HotPink">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="0"
+                    Margin="0,0,0,8">
+            
+            <TextBlock Text="Registrace odběratele"
+                       FontWeight="Bold"
+                       FontSize="14"
+                       HorizontalAlignment="Center"
+                       Foreground="White"/>
+            
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" 
+                        Orientation="Vertical" 
+                        Margin="0,0,8,0">
+                
+                <TextBlock Text="Jméno:" 
+                           Margin="0,6"
+                           Foreground="White"/>
+                
+                <TextBlock Text="Příjmení:"
+                           Margin="0,6" 
+                           Foreground="White"/>
+                
+                <TextBlock Text="Ulice:"
+                           Margin="0,6" 
+                           Foreground="White"/>
+                
+                <TextBlock Text="Č.p.:" 
+                           Margin="0,6" 
+                           Foreground="White"/>
+                
+                <TextBlock Text="Město:"
+                           Margin="0,6" 
+                           Foreground="White"/>
+                
+                <TextBlock Text="PSČ:"
+                           Margin="0,6"
+                           Foreground="White"/>
+                
+                <TextBlock Text="IČ:"
+                           Margin="0,6" 
+                           Foreground="White"/>
+                
+                <TextBlock Text="DIČ:"
+                           Margin="0,6"
+                           Foreground="White"/>
+                
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" 
+                        Orientation="Vertical">
+                
+                <TextBox x:Name="JmenoBox" 
+                         Margin="0,4"/>
+                
+                <TextBox x:Name="PrijmeniBox" 
+                         Margin="0,6"/>
+                
+                <TextBox x:Name="UliceBox"
+                         Margin="0,4"/>
+                
+                <TextBox x:Name="CPBox" 
+                         Margin="0,6"/>
+                
+                <TextBox x:Name="MestoBox"
+                         Margin="0,4"/>
+                
+                <TextBox x:Name="PSCBox"
+                         Margin="0,4"/>
+                
+                <TextBox x:Name="ICBox" 
+                         Margin="0,6"/>
+                
+                <TextBox x:Name="DICBox" 
+                         Margin="0,6"/>
+                
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0">
+            
+            <Button Content="Zrušit" 
+                    Width="80" 
+                    Margin="0,0,8,0"
+                    Click="Cancel_Click"/>
+            
+            <Button Content="Registrovat" 
+                    Width="110"
+                    Click="Register_Click"/>
+            
+        </StackPanel>
+    </Grid>
+</Window>
