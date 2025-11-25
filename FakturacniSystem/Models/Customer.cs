@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace FakturacniSystem.Models
 {
+    [Index(nameof(IC), IsUnique = true)]
     public class Customer
     {
         public int Id { get; set; }

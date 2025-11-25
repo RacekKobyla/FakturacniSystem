@@ -61,6 +61,13 @@ namespace FakturacniSystem.Windows
             var list = db.Customers.OrderBy(c => c.Prijmeni).ThenBy(c => c.Jmeno).ToList();
             CustomerComboBox.ItemsSource = list;
             // DisplayMemberPath je nastaven v XAML na "FullName"
+
+            // Odregistrovat starý handler a zaregistrovat nový, aby nedošlo k duplicitnímu přidání
+            CustomerComboBox.SelectionChanged -= CustomerComboBox_SelectionChanged;
+            CustomerComboBox.SelectionChanged += CustomerComboBox_SelectionChanged;
+
+            // Vyčistit preview (pokud není nic vybráno)
+            UpdateSelectedCustomerPreview(null);
         }
 
         private string GenerateInvoiceNumber(InvoiceSystemContext db)
@@ -79,6 +86,36 @@ namespace FakturacniSystem.Windows
         }
 
         private void CloseWindow(object sender, RoutedEventArgs e) => this.Close();
+
+        // Nový handler pro změnu výběru odběratele
+        private void CustomerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CustomerComboBox.SelectedItem is not Customer selected)
+            {
+                UpdateSelectedCustomerPreview(null);
+                return;
+            }
+
+            UpdateSelectedCustomerPreview(selected);
+        }
+
+        // Aktualizuje texty v preview panelu podle vybraného zákazníka
+        private void UpdateSelectedCustomerPreview(Customer c)
+        {
+            if (c == null)
+            {
+                SelectedCustomerNameText.Text = "Žádný odběratel vybrán.";
+                SelectedCustomerAddressText.Text = string.Empty;
+                SelectedCustomerICText.Text = string.Empty;
+                SelectedCustomerDICText.Text = string.Empty;
+                return;
+            }
+
+            SelectedCustomerNameText.Text = $"{c.Jmeno} {c.Prijmeni} (ID: {c.Id})";
+            SelectedCustomerAddressText.Text = $"{c.Ulice} {c.CP}, {c.PSC} {c.Mesto}";
+            SelectedCustomerICText.Text = $"IČ: {c.IC}";
+            SelectedCustomerDICText.Text = $"DIČ: {c.DIC}";
+        }
 
         // Jediný tlačítko: uloží do DB a nabídne uložení TXT
         private void GenerateAndSave_Click(object sender, RoutedEventArgs e)

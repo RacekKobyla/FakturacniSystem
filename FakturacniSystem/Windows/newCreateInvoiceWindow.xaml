@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Vytvoření faktury" 
         Height="420" 
-        Width="600" 
+        Width="700" 
         ResizeMode="NoResize"
         Background="HotPink"
         Foreground="White">
@@ -33,7 +33,7 @@
             <GroupBox Header="Odběratel" 
                       Grid.Column="0" 
                       Padding="8" 
-                      Margin="0,0,354,0" 
+                      Margin="0,0,378,10" 
                       Grid.ColumnSpan="3">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" 
@@ -54,6 +54,18 @@
                                FontStyle="Italic"
                                FontSize="11"
                                Margin="0,4,0,0"/>
+
+                    <GroupBox Header="Vybraný odběratel" 
+                              Margin="0,8,0,8" 
+                              x:Name="CustomerPreviewGroup" Height="184">
+                        <StackPanel>
+                            <TextBlock x:Name="SelectedCustomerNameText" 
+                                       FontWeight="Bold" />
+                            <TextBlock x:Name="SelectedCustomerAddressText" />
+                            <TextBlock x:Name="SelectedCustomerICText" />
+                            <TextBlock x:Name="SelectedCustomerDICText" />
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </GroupBox>
 
@@ -61,13 +73,13 @@
             <GridSplitter Grid.Column="2"
                           Width="6"
                           HorizontalAlignment="Stretch"
-                          Margin="19,0,343,0"/>
+                          Margin="208,0,354,0"/>
 
             <!-- Pravá část: data faktury -->
             <GroupBox Header="Data faktury" 
                       Grid.Column="2" 
                       Padding="8" 
-                      Margin="30,0,0,0">
+                      Margin="105,-5,0,5">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
